@@ -1,0 +1,36 @@
+<% include ../menu/menu %>
+<body>
+<div class="container-fluid">
+    <header class="container">
+    </header>
+    <main class="container">
+        <h4>Danh sách hãng xe</h4>
+        <table class="table table-striped">
+            <thead>
+            <th>Tên hãng</th>
+            <th>Logo</th>
+            <th>
+                <a href="/brands/create" class="btn btn-sm btn-success">Tạo mới</a>
+            </th>
+            </thead>
+            <tbody>
+            <% for (let i = 0; i < brands.length; i++){ %>
+                <tr>
+                    <td><%= brands[i].name %></td>
+                    <td><img width="150px" src="<%= brands[i].image %>" alt=""></td>
+                    <td>
+                        <a href="/brands/search/<%= brands[i].name %>" class="btn btn-sm btn-info">Chi tiết</a>
+                        &nbsp;
+                        <a href="/brands/remove/<%= brands[i].id %>"
+                           onclick="return confirm('Bạn có muốn xóa hãng xe này')" class="btn btn-danger btn-sm">Xóa</a>
+                        &nbsp;
+                        <a href="/brands/update/<%= brands[i].id %>" class="btn btn-sm btn-primary">Update</a>
+                    </td>
+
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </main>
+</div>
+</body>

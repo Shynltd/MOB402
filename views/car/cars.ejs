@@ -1,0 +1,55 @@
+<% include ../menu/menu %>
+<nav class="container navbar navbar-light bg-light" style="margin: 10px auto">
+    <a class="navbar-brand">Danh sách xe</a>
+    <a href="/car/createCar" class="btn btn-sm btn-success">Tạo mới</a>
+    <form class="form-inline" action="/car/search">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value="" name="s">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</nav>
+<div class="container">
+    <div class="card-group">
+        <div class="card-columns">
+            <% for (let i = 0; i < cars.length; i++) { %>
+                <div class="card">
+                    <div class="d-flex justify-content-center">
+                        <img class="img-fluid" style="max-height: 165px" src="<%= cars[i].image %>" alt="Card image">
+                    </div>
+
+                    <div class="card-body" >
+                        <h4 class="card-title"> <%= cars[i].name %> </h4>
+                        <p class="card-text">Hãng xe: <%= cars[i].brand%></p>
+                        <div class="d-flex justify-content-center">
+                        <a href="/car/search/<%= cars[i].id %>"
+                           class="btn btn-primary align-content-center"><%= cars[i].price %></a>
+                            &nbsp;
+                        <a href="/car/update/<%= cars[i].id %>"
+                           class="btn btn-success align-content-center">Update</a>
+                            &nbsp;
+                        <a href="/car/remove/<%= cars[i].id %>"
+                           class="btn btn-danger align-content-center" onclick="return confirm('Bạn có muốn xóa hãng xe này')">Remove</a>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination container align-bottom float-right">
+        <li class="page-item">
+            <a class="page-link" href="/car?page=1" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="/car?page=1">1</a></li>
+        <li class="page-item"><a class="page-link" href="/car?page=2">2</a></li>
+        <li class="page-item"><a class="page-link" href="/car?page=3">3</a></li>
+        <li class="page-item">
+            <a class="page-link" href="/car?page=3" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+

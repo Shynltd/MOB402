@@ -1,0 +1,43 @@
+<% include ../menu/menu %>
+<main class="container">
+    <div class="jumbotron">
+        <h1 class="display-6">Hãng <%= test.name %></h1>
+        <div class="container">
+            <div class="card-group">
+                <div class="card-columns">
+                    <% for (let i = 0; i < cars.length; i++) { %>
+                        <div class="card">
+                            <div class="d-flex justify-content-center">
+                                <img class="img-fluid" style="max-height: 165px" src="<%= cars[i].image %>" alt="Card image">
+                            </div>
+
+                            <div class="card-body">
+                                <h4 class="card-title"> <%= cars[i].name %> </h4>
+                                <p class="card-text">Sản phẩm được phân phối độc quyền tại LTĐ.BacNinh.Vn</p>
+                                <a href="/car/search/<%= cars[i].id %>"
+                                   class="btn btn-primary align-content-center"><%= cars[i].price %></a>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<nav aria-label="Page navigation example">
+    <ul class="pagination container align-bottom float-right">
+        <li class="page-item">
+            <a class="page-link" href="/brands/search/<%= test.name %>?page=1" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="/brands/search/<%= test.name %>?page=1">1</a></li>
+        <li class="page-item"><a class="page-link" href="/brands/search/<%= test.name %>?page=2">2</a></li>
+        <li class="page-item"><a class="page-link" href="/brands/search/<%= test.name %>?page=3">3</a></li>
+        <li class="page-item">
+            <a class="page-link" href="/brands/search/<%= test.name %>?page=3" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>

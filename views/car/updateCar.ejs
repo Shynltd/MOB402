@@ -1,0 +1,42 @@
+<% include ../menu/menu %>
+<form method="post" action="/car/update/<%= car.id %>" class="container">
+    <div class="form-group">
+        <label for="formGroupExampleInput">Name</label>
+        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Name" value="<%= car.name %>"
+               name="name">
+    </div>
+    <div class="form-group">
+        <label for="formGroupExampleInput2">Brand</label>
+
+        <select
+                name="brand_name" class="form-control">
+            <% for (let i = 0; i < bran.length; i++) { %>
+                <option
+                <% if (car.brand == bran[i].name) { %>
+                    selected
+                        <% } %>
+                   value="<%= bran[i].name %>"><%= bran[i].name %></option>
+            <% } %>
+        </select>
+
+    </div>
+
+
+    <div class="form-group">
+        <label for="formGroupExampleInput2">Price</label>
+        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Price" value="<%= car.price %>"
+               name="price">
+    </div>
+
+    <!--    <div class="form-group" >-->
+    <!--        <label for="exampleFormControlFile1">Image</label>-->
+    <!--        <input type="file" name="avatar" class="form-control-file" id="exampleFormControlFile1">-->
+    <!--    </div>-->
+    <div class="form-group">
+        <label for="formGroupExampleInput2">Image</label>
+        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Image" value="<%= car.image %>"
+               name="image">
+    </div>
+
+    <button type="submit" class="btn-outline-primary">Update</button>
+</form>

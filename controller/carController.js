@@ -8,8 +8,8 @@ module.exports.carsList = async (req, res) => {
     var start = (page - 1) * perPage;
     var end = page * perPage;
     let car = await cars.find({});
-    // res.render('car/cars', {cars: car.slice(start, end)});
-    res.send(car)
+    res.render('car/cars', {cars: car.slice(start, end)});
+    // res.send(car)
 };
 
 module.exports.carSearch = async (req, res) => {

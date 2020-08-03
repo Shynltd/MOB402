@@ -8,4 +8,4 @@ var brandSchema = new mongoose.Schema({
         type: String,
     }
 })
-module.exports = mongoose.model('Brands', brandSchema, 'user');
+module.exports = mongoose.model('Brands', brandSchema, 'brand');

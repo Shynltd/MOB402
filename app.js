@@ -10,6 +10,7 @@ var brandRoutes = require('./routes/brandRoutes');
 var carRouter = require('./routes/carRoutes');
 var hospitalRoutes = require('./routes/hospitalRoutes');
 var patientsRoutes = require('./routes/patientsRoutes');
+var userRoutes = require('./routes/userRoutes');
 
 var mongoose = require('./monggo/monggosv');
 
@@ -33,11 +34,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.use(fileUpload({
-    createParentPath:true
+    createParentPath: true
 }));
 app.use(cors());
 
-
+app.use('/', userRoutes);
 app.use('/brands', brandRoutes);
 app.use('/car', carRouter);
 app.use('/patients', patientsRoutes);
@@ -58,8 +59,6 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-app.get('/', (req, res) => {
-  res.redirect('/brands');
-});
+
 
 module.exports = app;

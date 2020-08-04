@@ -43,7 +43,7 @@ module.exports.addCar = async (req, res) => {
     let image = null;
     if (req.files){
         image = req.files.image;
-        let filename = "logo/" + uniqid()+ "-" +image.name;
+        let filename = "car/" + uniqid()+ "-" +image.name;
         image.mv(`./uploads/${filename}`)
         image = filename;
     }

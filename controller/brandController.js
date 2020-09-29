@@ -2,10 +2,11 @@ var uniqid = require('uniqid');
 var fs = require('fs');
 var brands = require('../models/brands');
 var cars = require('../models/cars');
+var db = require('../monggo/monggosv')
 
 module.exports.getAllBrands = async (req, res) => {
     let brand = await brands.find({});
-    // res.json('http://localhost:2000/patients')
+    // res.json(brand);
     res.render('brand/brands', {brands: brand})
 }
 
@@ -21,7 +22,6 @@ module.exports.getCarByBrand = async (req, res) => {
         })
     let test1 = await cars.find({brand: dulieu})
     res.render('brand/carByBrand', {test, cars: test1.slice(start, end)});
-    console.log(test1);
 }
 
 module.exports.getCreate = (req, res) => {
@@ -33,7 +33,7 @@ module.exports.postCreate = async (req, res) => {
     let logo = null;
     if (req.files){
         logo = req.files.logo;
-        let filename = "logo/" + uniqid()+ "-" +logo.name;
+        let filename ="/logo/" + uniqid()+ "-" +logo.name;
         logo.mv(`./uploads/${filename}`)
         logo = filename;
     }
@@ -52,7 +52,10 @@ module.exports.removeBrandById = async (req, res) => {
     brands.findOneAndRemove({_id: brandId}).catch(err => {
         res.send("Lỗi con mẹ nó r")
     });
-    res.redirect('/brands');
+    cars.remove({brand:brand.name}).catch(err => {
+        res.send("Lỗi")
+    })
+      res.redirect('/brands');
 }
 module.exports.getUpdateBrandById = async (req, res) => {
     let brandId = req.params.id;
@@ -74,7 +77,7 @@ module.exports.postUpdateBrandById = async (req, res) => {
     let updateBrand = await brands.findOneAndUpdate({_id: brandId}, {
         name: name,
         image: image
-    });
+    });m
     if (updateBrand) {
         res.redirect('/brands');
     } else {

@@ -9,7 +9,7 @@ module.exports.checkLogin = async (req, res) => {
     let userId = await user.findOne({userName:userName});
     if (userId){
         let password =req.body.password;
-        if (userId.passWord === password){
+        if (userId.passWord == password){
             res.redirect('/car')
         } else {
             res.send('Sai mật khẩu')

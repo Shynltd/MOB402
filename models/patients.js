@@ -1,12 +1,15 @@
 var mongoose = require('mongoose');
 var patientSchema = new mongoose.Schema({
 
-    name:String,
+    name:{
+        type:String,
+        required:true,
+    },
     avatar: String,
-    age: String,
+    age: Number,
     address: String,
     hospital_name: String,
-    bed: String,
+    bed: Number,
 
 })
 module.exports = mongoose.model('Patients', patientSchema, 'patients');

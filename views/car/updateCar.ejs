@@ -1,5 +1,6 @@
 <% include ../menu/menu %>
-<form method="post" action="/car/update/<%= car.id %>" class="container">
+<form method="post" action="/car/update/<%= car.id %>" class="container" enctype="multipart/form-data"
+      onsubmit=" return validateForm()">
     <div class="form-group">
         <label for="formGroupExampleInput">Name</label>
         <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Name" value="<%= car.name %>"
@@ -15,7 +16,7 @@
                 <% if (car.brand == bran[i].name) { %>
                     selected
                         <% } %>
-                   value="<%= bran[i].name %>"><%= bran[i].name %></option>
+                    value="<%= bran[i].name %>"><%= bran[i].name %></option>
             <% } %>
         </select>
 
@@ -24,7 +25,8 @@
 
     <div class="form-group">
         <label for="formGroupExampleInput2">Price</label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Price" value="<%= car.price %>"
+        <input type="number" class="form-control" id="formGroupExampleInput2" placeholder="Price"
+               value="<%= car.price %>"
                name="price">
     </div>
 
@@ -34,9 +36,59 @@
     <!--    </div>-->
     <div class="form-group">
         <label for="formGroupExampleInput2">Image</label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Image" value="<%= car.image %>"
+        <input type="file" class="form-control" id="formGroupExampleInput2"
                name="image">
     </div>
 
     <button type="submit" class="btn-outline-primary">Update</button>
+    <% include ../menu/script.ejs %>
+    <script>
+        function validateForm() {
+
+            let isValid = true;
+
+            $('.alert-danger').remove();
+
+            let name = $('[name="name"]').val();
+            let price = $('[name="price"]').val()
+            // let price = $('[name="price"]').val() == "" ? 0 : parseInt($('[name="price"]').val());
+
+            if (name.length < 4) {
+                isValid = false;
+                let name_err = `<div class="alert alert-danger" role="alert">Vui lòng nhập tên lớn hơn 4 kí tự</div>`
+                $('[name="name"]').after(name_err)
+            }
+
+            if (price <= 0) {
+                isValid = false;
+                let price_err = `<div class="alert alert-danger" role="alert">Vui lòng nhập giá tiền lớn hơn 0đ</div>`
+                $('[name="price"]').after(price_err)
+            }
+
+
+            if ($('[name="image"]').get(0).files.length !== 0 && checkfileImageType(`[name="image"]`) == false) {
+                let logo_err = `<div class="alert alert-danger" role="alert">Vui lòng nhập đúng định dạng file jpg, png, pdf</div>`
+                $('[name="image"]').after(logo_err);
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function checkfileImageType(selector) {
+            var val = $(selector).val();
+            switch (val.substring(val.lastIndexOf('.') + 1).toLowerCase()) {
+                case 'gif':
+                case 'jpg':
+                case 'png':
+                    return true;
+                    break;
+                default:
+                    return false;
+                    break;
+            }
+        }
+
+
+    </script>
 </form>

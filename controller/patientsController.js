@@ -1,5 +1,8 @@
 var patients = require('../models/patients');
 var hospitals = require('../models/hospitals');
+const uniqid = require("uniqid");
+var fs = require("fs");
+
 
 module.exports.getAllpatients = async (req, res) => {
     var page = parseInt(req.query.page) || 1;
@@ -30,7 +33,13 @@ module.exports.postCreate = async (req, res) => {
     var address = req.body.address;
     var hospital_name = req.body.hospital_name;
     var bed = req.body.bed;
-    var avatar = req.body.avatar;
+    var avatar = null;
+    if (req.files){
+        avatar = req.files.avatar;
+        let filename ="/patient/"+ uniqid()+ "-" +avatar.name;
+        avatar.mv(`./uploads/${filename}`)
+        avatar = filename;
+    }
     var addPatient = await patients.create({name: name, avatar: avatar, age: age, address: address, hospital_name: hospital_name, bed: bed});
     if (addPatient.id != undefined) {
         res.redirect('/patients');
@@ -54,11 +63,19 @@ module.exports.getUpdatePatientsById = async (req, res) => {
 module.exports.postUpdatePatientsById = async (req, res) => {
     let patientId = req.params.patientId;
     var name = req.body.name;
-    var avatar = req.body.avatar;
+    var patient = await patients.findById(patientId);
+    var avatar = patient.avatar;
     var age = req.body.age;
     var address = req.body.address;
     var hospital_name = req.body.hospital_name;
     var bed = req.body.bed;
+    if (req.files){
+        fs.unlinkSync(`./uploads/${patient.avatar}`);
+        avatar = req.files.avatar;
+        let filename ="/patient/"+ uniqid()+ "-" +avatar.name;
+        avatar.mv(`./uploads/${filename}`)
+        avatar = filename;
+    }
     let updatedPatient = await patients.findOneAndUpdate({_id: patientId}, {
         name,
         avatar,

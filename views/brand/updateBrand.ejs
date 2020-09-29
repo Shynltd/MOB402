@@ -1,5 +1,5 @@
 <% include ../menu/menu %>
-<form method="post" action="/brands/update/<%= updateBrand.id %>" class="container" enctype="multipart/form-data">
+<form method="post" onsubmit="return validateForm()" action="/brands/update/<%= updateBrand.id %>" class="container" enctype="multipart/form-data">
     <div class="form-group">
         <label for="formGroupExampleInput">Tên hãng</label>
         <input type="text" class="form-control" id="formGroupExampleInput" name="name" value="<%= updateBrand.name %>">
@@ -13,4 +13,38 @@
         &nbsp;
         <a href="/brands" class="btn-primary btn-sm">Hủy</a>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function validateForm() {
+            let isValid = true;
+            $('.alert-danger').remove();
+            let name = $('[name="name"]').val();
+            if (name.length < 4) {
+                isValid = false;
+                let name_err = `<div class="alert alert-danger" role="alert">Vui lòng nhập tên lớn hơn 4 kí tự</div>`
+                $('[name="name"]').after(name_err)
+            }
+
+
+            if ($('[name="logo"]').get(0).files.length !== 0 && checkfileImageType(`[name="logo"]`) == false) {
+                let logo_err = `<div class="alert alert-danger" role="alert">Vui lòng nhập đúng định dạng file jpg, png, pdf</div>`
+                $('[name="logo"]').after(logo_err);
+                isValid = false;
+
+            }
+
+            return isValid;
+        }
+        function checkfileImageType(selector){
+            var val = $(selector).val();
+            switch(val.substring(val.lastIndexOf('.') + 1).toLowerCase()){
+                case 'gif': case 'jpg': case 'png':
+                    return true;
+                    break;
+                default:
+                    return false;
+                    break;
+            }
+        }
+    </script>
 </form>

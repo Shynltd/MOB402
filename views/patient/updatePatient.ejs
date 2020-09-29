@@ -1,5 +1,6 @@
 <% include ../menu/menu %>
-<form method="post" action="/patients/update/<%=patient.id%>" class="container">
+<form method="post" action="/patients/update/<%= patient.id %>" class="container" enctype="multipart/form-data"
+      onsubmit="return validateForm()">
     <div class="form-group">
         <label for="formGroupExampleInput">Name</label>
         <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Name" name="name"
@@ -7,17 +8,22 @@
     </div>
     <div class="form-group">
         <label for="formGroupExampleInput2">Age</label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Age" name="age" value="<%= patient.age %>">
+        <input type="number" class="form-control" id="formGroupExampleInput2" placeholder="Age" name="age"
+               value="<%= patient.age %>">
     </div>
     <div class="form-group">
         <label for="formGroupExampleInput2">Address</label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Address" name="address" value="<%= patient.address %>">
+        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Address" name="address"
+               value="<%= patient.address %>">
     </div>
     <div class="form-group">
         <label for="formGroupExampleInput2">Hospital Name</label>
         <select name="hospital_name" class="form-control">
             <% for (let i = 0; i < hospital.length; i++) { %>
-                <option <% if (patient.hospital_name == hospital[i].name) { %> selected <%}%> value="<%= hospital[i].name %>"><%= hospital[i].name %></option>
+                <option
+                <% if (patient.hospital_name == hospital[i].name) { %> selected
+                        <% } %>
+                                                                       value="<%= hospital[i].name %>"><%= hospital[i].name %></option>
             <% } %>
         </select>
     </div>
@@ -25,7 +31,8 @@
 
     <div class="form-group">
         <label for="formGroupExampleInput2">Bed</label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Bed" name="bed" value="<%= patient.bed %>">
+        <input type="number" class="form-control" id="formGroupExampleInput2" placeholder="Bed" name="bed"
+               value="<%= patient.bed %>">
     </div>
 
     <!--    <div class="form-group" >-->
@@ -34,8 +41,65 @@
     <!--    </div>-->
     <div class="form-group">
         <label for="formGroupExampleInput2">Avatar</label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Image" name="avatar" value="<%= patient.avatar %>">
+        <input type="file" class="form-control" id="formGroupExampleInput2" name="avatar">
     </div>
 
     <button type="submit" class="btn-outline-primary">Update Patient</button>
+    <% include ../menu/script.ejs %>
+    <script>
+        function validateForm() {
+            let isValid = true;
+            $('.alert-danger').remove();
+            let name = $('[name="name"]').val();
+            if (name.length < 4) {
+                isValid = false;
+                let name_err = `<div class="alert alert-danger" role="alert">Tên không được dưới 4 kí tự</div>`
+                $('[name="name"]').after(name_err);
+
+            }
+            let age = $('[name="age"]').val();
+            if (age <= 6) {
+                let age_err = `<div class="alert alert-danger" role="alert">Bệnh nhân là trẻ sơ sinh </div>`
+                $('[name="age"]').after(age_err);
+                isValid = false;
+            }
+            let address = $('[name="address"]').val();
+            if (address.length < 4) {
+                isValid = false;
+                let address_err = `<div class="alert alert-danger" role="alert">Địa chỉ phải lớn hơn 4 kí tự</div>`
+                $('[name="address"]').after(address_err);
+
+            }
+            let bed = $('[name="bed"]').val();
+            if (bed <= 0) {
+                let bed_err = `<div class="alert alert-danger" role="alert">Số giường phải khác 0 </div>`
+                $('[name="bed"]').after(bed_err);
+                isValid = false;
+            }
+
+            if ($('[name="avatar"]').get(0).files.length !== 0 && checkfileImageType(`[name="avatar"]`) == false) {
+                let avatar_err = `<div class="alert alert-danger" role="alert">Vui lòng nhập đúng định dạng file jpg, png, pdf</div>`
+                $('[name="avatar"]').after(avatar_err);
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function checkfileImageType(selector) {
+            var val = $(selector).val();
+            switch (val.substring(val.lastIndexOf('.') + 1).toLowerCase()) {
+                case 'gif':
+                case 'jpg':
+                case 'png':
+                    return true;
+                    break;
+                default:
+                    return false;
+                    break;
+            }
+        }
+
+
+    </script>
 </form>

@@ -1,20 +1,22 @@
-var patients = require('../models/patients');
-var hospitals = require('../models/hospitals');
+let patients = require('../models/patients');
+let hospitals = require('../models/hospitals');
+let fs = require('fs');
+let uniqid = require("uniqid");
 
 module.exports.hospitalsList = async (req, res) => {
-    var page = parseInt(req.query.page) || 1;
-    var perPage = 9;
-    var start = (page - 1) * perPage;
-    var end = page * perPage;
+    let page = parseInt(req.query.page) || 1;
+    let perPage = 9;
+    let start = (page - 1) * perPage;
+    let end = page * perPage;
     let hospital = await hospitals.find({});
     res.render('hospital/hospitals', {hospitals: hospital.slice(start, end)});
 };
 
 module.exports.getPatientByHospital = async (req, res) => {
-    var page = parseInt(req.query.page) || 1;
-    var perPage = 9;
-    var start = (page - 1) * perPage;
-    var end = page * perPage;
+    let page = parseInt(req.query.page) || 1;
+    let perPage = 9;
+    let start = (page - 1) * perPage;
+    let end = page * perPage;
     let hospitalName = req.params.hospitalName;
     let hospital = await hospitals.findOne({name: hospitalName})
         .catch((err) => {
@@ -29,11 +31,17 @@ module.exports.createHospitals = async (req, res) => {
 }
 
 module.exports.addHospitals = async (req, res) => {
-    var name = req.body.name;
-    var logo = req.body.logo;
-    var address = req.body.address;
-    var bed_number = req.body.bed_number;
-    var addHospital = await hospitals.create({address: address, name: name, logo: logo, bed_number: bed_number});
+    let name = req.body.name;
+    let logo = null;
+    let address = req.body.address;
+    let bed_number = req.body.bed_number;
+    if (req.files){
+        logo = req.files.logo;
+        let filename ="/hospital/"+ uniqid()+ "-" +logo.name;
+        logo.mv(`./uploads/${filename}`)
+        logo = filename;
+    }
+    let addHospital = await hospitals.create({address: address, name: name, logo: logo, bed_number: bed_number});
     if (addHospital.id != undefined) {
         res.redirect('/hospital');
     } else {
@@ -55,10 +63,18 @@ module.exports.getUpdateHospitalsById = async (req, res) => {
 
 module.exports.postUpdateHospitalsById = async (req, res) => {
     let hospitalId = req.params.hospitalId;
-    var name = req.body.name;
-    var address = req.body.address;
-    var bed_number = req.body.bed_number;
-    var logo = req.body.logo;
+    let name = req.body.name;
+    let address = req.body.address;
+    let bed_number = req.body.bed_number;
+    let hospital = await hospitals.findOne({_id: hospitalId});
+    let logo = hospital.logo;
+    if (req.files){
+        fs.unlinkSync(`./uploads/${hospital.logo}`);
+        logo = req.files.logo;
+        let filename ="/hospital/"+ uniqid()+ "-" +logo.name;
+        logo.mv(`./uploads/${filename}`)
+        logo = filename;
+    }
     let updatedHospital = await hospitals.findOneAndUpdate({_id: hospitalId}, {
         name,
         address,

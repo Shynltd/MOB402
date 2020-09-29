@@ -1,6 +1,7 @@
 var cars = require('../models/cars');
 var brands = require('../models/brands');
 var uniqid = require('uniqid');
+var fs = require('fs');
 
 module.exports.carsList = async (req, res) => {
     var page = parseInt(req.query.page) || 1;
@@ -43,7 +44,7 @@ module.exports.addCar = async (req, res) => {
     let image = null;
     if (req.files){
         image = req.files.image;
-        let filename = "car/" + uniqid()+ "-" +image.name;
+        let filename ="/car/"+ uniqid()+ "-" +image.name;
         image.mv(`./uploads/${filename}`)
         image = filename;
     }
@@ -56,9 +57,12 @@ module.exports.addCar = async (req, res) => {
 }
 module.exports.removeCarById = async (req, res) => {
     let carId = req.params.carId;
+    let car = await cars.findById(carId);
+    fs.unlinkSync(`./uploads${car.image}`);
     cars.findOneAndRemove({_id: carId}).catch(err => {
         res.send("Lỗi con mẹ nó r")
     });
+
     res.redirect('/car');
 }
 module.exports.getUpdateCarById = async (req, res) => {
@@ -69,10 +73,18 @@ module.exports.getUpdateCarById = async (req, res) => {
 }
 module.exports.postUpdateCarById = async (req, res) => {
     let carId = req.params.carId;
+    let car = await cars.findOne({_id: carId});
     var name = req.body.name;
     var price = req.body.price;
     var brand = req.body.brand_name;
-    var image = req.body.image;
+    let image = car.image;
+    if (req.files){
+        fs.unlinkSync(`./uploads/${car.image}`);
+        image = req.files.image;
+        let filename ="/car/"+ uniqid()+ "-" +image.name;
+        image.mv(`./uploads/${filename}`)
+        image = filename;
+    }
     let updatedCar = await cars.findOneAndUpdate({_id: carId}, {
         name,
         price,

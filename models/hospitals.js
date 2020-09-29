@@ -4,6 +4,6 @@ var hospitalSchema = new mongoose.Schema({
     name: String,
     address: String,
     logo: String,
-    bed_number: String
+    bed_number: Number
 })
 module.exports = mongoose.model('Hospitals', hospitalSchema, 'hospitals');

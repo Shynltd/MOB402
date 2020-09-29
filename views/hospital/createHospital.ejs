@@ -1,12 +1,12 @@
 <% include ../menu/menu %>
-<form method="post" action="/hospital/create" class="container">
+<form method="post" onsubmit="return validateForm()" action="/hospital/create" class="container" enctype="multipart/form-data">
     <div class="form-group">
         <label for="formGroupExampleInput">Hospital name</label>
         <input type="text" class="form-control" id="formGroupExampleInput" name="name" placeholder="Hospital name">
     </div>
     <div class="form-group">
         <label for="formGroupExampleInput2">Logo</label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" name="logo" placeholder="Logo">
+        <input type="file" class="form-control" id="formGroupExampleInput2" name="logo" >
     </div>
     <div class="form-group">
         <label for="formGroupExampleInput2">Address</label>
@@ -14,11 +14,70 @@
     </div>
     <div class="form-group">
         <label for="formGroupExampleInput2">Bed number</label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" name="bed_number" placeholder="Bed number">
+        <input type="number" class="form-control" id="formGroupExampleInput2" name="bed_number" placeholder="Bed number">
     </div>
     <div class="text-center">
         <button class="btn-primary btn-sm" type="submit">Lưu</button>
         &nbsp;
         <a href="/hospital" class="btn-primary btn-sm">Hủy</a>
     </div>
+    <% include ../menu/script.ejs %>
+    <script>
+        function validateForm() {
+
+            let isValid = true;
+
+            $('.alert-danger').remove();
+
+            let name = $('[name="name"]').val();
+            let bed_number = $('[name="bed_number"]').val()
+            let address = $('[name="address"]').val()
+            // let price = $('[name="price"]').val() == "" ? 0 : parseInt($('[name="price"]').val());
+
+            if (name.length < 4) {
+                isValid = false;
+                let name_err = `<div class="alert alert-danger" role="alert">Vui lòng nhập tên lớn hơn 4 kí tự</div>`
+                $('[name="name"]').after(name_err)
+            }
+
+            if (bed_number <= 0) {
+                isValid = false;
+                let bed_number_err = `<div class="alert alert-danger" role="alert">Vui lòng nhập số giường bệnh lớn hơn 0</div>`
+                $('[name="bed_number"]').after(bed_number_err)
+            }
+            if (address.length < 4) {
+                isValid = false;
+                let address_err = `<div class="alert alert-danger" role="alert">Vui lòng nhập địa chỉ lớn hơn 4 kí tự</div>`
+                $('[name="address"]').after(address_err)
+            }
+
+            if ($('[name="logo"]').get(0).files.length === 0) {
+                let logo_err = `<div class="alert alert-danger" role="alert">Vui lòng chọn file hình ảnh</div>`
+                $('[name="logo"]').after(logo_err);
+                isValid = false;
+            } else if (checkfileImageType(`[name="logo"]`) == false) {
+                let logo_err = `<div class="alert alert-danger" role="alert">Vui lòng nhập đúng định dạng file jpg, png, pdf</div>`
+                $('[name="logo"]').after(logo_err);
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function checkfileImageType(selector) {
+            var val = $(selector).val();
+            switch (val.substring(val.lastIndexOf('.') + 1).toLowerCase()) {
+                case 'gif':
+                case 'jpg':
+                case 'png':
+                    return true;
+                    break;
+                default:
+                    return false;
+                    break;
+            }
+        }
+
+
+    </script>
 </form>

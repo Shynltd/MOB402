@@ -11,6 +11,7 @@ var carRouter = require('./routes/carRoutes');
 var hospitalRoutes = require('./routes/hospitalRoutes');
 var patientsRoutes = require('./routes/patientsRoutes');
 var userRoutes = require('./routes/userRoutes');
+var apiRoutes = require('./api/apiRoutes');
 
 var mongoose = require('./monggo/monggosv');
 
@@ -43,6 +44,7 @@ app.use('/brands', brandRoutes);
 app.use('/car', carRouter);
 app.use('/patients', patientsRoutes);
 app.use('/hospital', hospitalRoutes);
+app.use('/api',apiRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

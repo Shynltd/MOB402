@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-let dev_db_url = 'mongodb://localhost:27017/Assignment';
+let dev_db_url = 'mongodb+srv://dailtph08173:daicaptain@cluster0.yzdpq.mongodb.net/AssSever';
 let mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, {
     useNewUrlParser: true,

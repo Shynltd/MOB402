@@ -11,7 +11,7 @@ module.exports.checklogin = async (req, res) => {
     if (userId) {
         let password = req.body.passWord;
         if (userId.passWord == password) {
-            res.json({status: "OK"});
+            res.json({status: "OK", user: userId});
         } else {
             res.json({status: "Mật khẩu không chính xác"});
         }

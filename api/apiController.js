@@ -47,7 +47,6 @@ module.exports.getCarByBrand = async (req, res) => {
         })
     let test1 = await cars.find({brand: test.name})
     res.json(test1);
-    // res.render('brand/carByBrand', {test, cars: test1.slice(start, end)});
 }
 module.exports.removeCarById = async (req, res) => {
     let carId = req.params.id;

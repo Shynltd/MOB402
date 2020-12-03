@@ -7,6 +7,10 @@ var userSchema = new mongoose.Schema({
     passWord: {
         type: String,
         required: true,
+    },
+    role: {
+        type: String,
+        required: true,
     }
 })
 module.exports = mongoose.model('User', userSchema, 'user');
